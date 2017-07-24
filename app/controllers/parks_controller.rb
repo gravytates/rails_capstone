@@ -1,11 +1,11 @@
 class ParksController < ApplicationController
 
-  @@data = File.read("app/views/parks/park_data.json")
 
   def index
+    @parks = Park.get_parks
     respond_to do |format|
       format.html
-      format.json { render json: @@data }
+      format.json { render json: @parks }
     end
   end
 
