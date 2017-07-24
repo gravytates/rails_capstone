@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
-  root 'home#index'
-  resources :home, only: [:index, :create]
+  root 'parks#index'
+  resources :parks, only: :index
+  # get 'parks/index', :defaults => { :format => 'json' }
 end
