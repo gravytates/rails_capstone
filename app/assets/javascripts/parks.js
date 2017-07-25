@@ -1,4 +1,3 @@
-var response;
 
 // Ajax call
 // var loadData = function(){
@@ -21,6 +20,8 @@ var response;
 // };
 
 // width and height for SVG element
+var response;
+var scale = 4000;
 
 
 
@@ -32,8 +33,8 @@ $(document).ready(function(){
 
   // AlbersUSA projection
   var projection = d3.geoAlbersUsa()
-  // .translate([w/2, h/2])
-  .scale([1500]);
+  .translate([w/0.6, h/0.6])
+  .scale([scale]);
   //  .scale([250]);
   //Define path generator
   var path = d3.geoPath(projection);
@@ -42,7 +43,14 @@ $(document).ready(function(){
   var svg = d3.select("body")
   .append("svg")
   .attr("width", w)
-  .attr("height", h)
+  .attr("height", h);
+
+  // Ken's zoom magic
+  let something = d3.select("svg")
+     .call(d3.zoom().on("zoom", function () {
+        svg.attr("transform", d3.event.transform)
+     }))
+     .append("g");
   //Load in GeoJSON data
 
   function error() {
@@ -52,10 +60,8 @@ $(document).ready(function(){
   function run() {
 
     d3.json('/park_data.json', function(json) {
-      // if (error) {
-      //   console.log(error);
-      // } else {
-      console.log(json)
+      // var bounds = path.bounds(json);
+
       svg.selectAll("path")
       .data(json.features)
       .enter()
@@ -64,7 +70,7 @@ $(document).ready(function(){
       .attr("fill", function() {
          return "green";
         });
-      // }
+      console.log(json)
 
     });
   }
