@@ -13,5 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require rails-ujs
-//= require d3
+//= require d3.min
+//= require d3-geo.v1.min
 //= require_tree .

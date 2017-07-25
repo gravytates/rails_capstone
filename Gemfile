@@ -27,7 +27,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'rest-client'
 gem 'jquery-rails'
 gem 'rb-readline'
-gem "d3-rails"
+# gem "d3-rails"
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password

@@ -26,8 +26,8 @@ var h = 500;
 
 // AlbersUSA projection
 var projection = d3.geoAlbersUsa()
-           .translate([w/2, h/2])
-           .scale([250]);
+           .translate([w/2, h/2]);
+          //  .scale([250]);
 //Define path generator
 var path = d3.geoPath()
        .projection(projection);
@@ -44,21 +44,17 @@ function error() {
 
 function run() {
 
-  d3.json('/park_data.json', function(error, data) {
-    response = data
-    console.log(response);
-    if (error) {
-      console.log(error);
-    } else {
-      alert('does this run at all?');
-      console.log(response);
-      // Bind data and create one path per GeoJSON feature
-      svg.selectAll("path")
-      .data(response.features)
-      .enter()
-      .append("path")
-      .attr("d", path);
-    }
+  d3.json('/park_data.json', function(json) {
+    // if (error) {
+    //   console.log(error);
+    // } else {
+    console.log(json);
+    svg.selectAll("div")
+    .data(json.features)
+    .enter()
+    .append("div")
+    .attr("d", path);
+    // }
 
   });
 }
