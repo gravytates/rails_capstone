@@ -1,5 +1,6 @@
 // PATH GENERATOR
 // var path = d3.geo.path();
+dataset = []
 var loadData = function(){
   $.ajax({
     type: 'GET',
@@ -7,7 +8,9 @@ var loadData = function(){
     url: '/parks',
     dataType: 'json',
     success: function(data){
-      drawBarPlot(data);
+      console.log(data);
+      dataset.push(data);
+      runStuff(data);
     },
     failure: function(result){
       error();
@@ -15,31 +18,28 @@ var loadData = function(){
   });
 };
 
-function drawBarPlot(data){
-  console.log(data);
-}
+var w = 800;
+var h = 500;
+//Define path generator, using the Albers USA projection
+function runStuff(data) {
+  var path = d3.geoPath()
+         .projection(d3.geoAlbersUsa());
+  //Create SVG element
+  var svg = d3.select("body")
+        .append("svg")
+        .attr("width", w)
+        .attr("height", h);
+  //Load in GeoJSON data
+  d3.json(data, function(json) {
+    //Bind data and create one path per GeoJSON feature
+    svg.selectAll("path")
+       .dataset(json.features)
+       .enter()
+       .append("path")
+       .attr("d", path);
 
-// var w = 500;
-// var h = 300;
-// //Define path generator, using the Albers USA projection
-// var path = d3.geoPath()
-//        .projection(d3.geoAlbersUsa());
-// //Create SVG element
-// var svg = d3.select("body")
-//       .append("svg")
-//       .attr("width", w)
-//       .attr("height", h);
-// //Load in GeoJSON data
-// d3.json(dataset, function(json) {
-//
-//   //Bind data and create one path per GeoJSON feature
-//   svg.selectAll("path")
-//      .data(json.features)
-//      .enter()
-//      .append("path")
-//      .attr("d", path);
-//
-// });
+  });
+}
 
 function error() {
     console.log("Something went wrong!");
