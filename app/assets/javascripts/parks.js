@@ -1,77 +1,50 @@
-
-// Ajax call
-// var loadData = function(){
-//   Promise.resolve(
-//     $.ajax({
-//       type: 'GET',
-//       contentType: 'application/json; charset=utf-8',
-//       url: '/parks',
-//       dataType: 'json',
-//       // timeout: 3000 //3 second timeout
-//     })
-//   ).then(function(data) {
-//     run(data);
-//   }).catch(function(e) {
-//     if(e.statusText == 'timeout')
-//     {
-//       alert('Native Promise: Failed from timeout');
-//     }
-//   });
-// };
-
 // width and height for SVG element
 var response;
-var scale = 4000;
-
-
+var scale = 7000;
 
 $(document).ready(function(){
-  // loadData();
   run();
-  var w = 800;
-  var h = 500;
+  var w = 1000;
+  var h = 600;
 
-  // AlbersUSA projection
-  var projection = d3.geoAlbersUsa()
-  .translate([w/0.6, h/0.6])
-  .scale([scale]);
-  //  .scale([250]);
-  //Define path generator
-  var path = d3.geoPath(projection);
-  //  .projection(projection);
-  //Create SVG element
   var svg = d3.select("body")
   .append("svg")
   .attr("width", w)
   .attr("height", h);
 
-  // Ken's zoom magic
-  let something = d3.select("svg")
-     .call(d3.zoom().on("zoom", function () {
-        svg.attr("transform", d3.event.transform)
-     }))
-     .append("g");
-  //Load in GeoJSON data
 
-  function error() {
-    console.log("Something went wrong!");
-  }
-
+  // MAKE A MAP
   function run() {
-
     d3.json('/park_data.json', function(json) {
-      // var bounds = path.bounds(json);
 
-      svg.selectAll("path")
-      .data(json.features)
-      .enter()
-      .append("path")
-      .attr("d", path)
-      .attr("fill", function() {
-         return "green";
-        });
-      console.log(json)
-
+      var projection = d3.geoAlbersUsa()
+                          .scale(1)
+                          .translate([0,0]);
+                      // create a path generator.
+                      var path = d3.geoPath()
+                          .projection(projection);
+                      // compute bounds of a point of interest, then derive scale and translate
+                      var b = path.bounds(json),
+                          s = .95 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h),
+                          t = [(w - s * (b[1][0] + b[0][0])) / 2, (h - s * (b[1][1] + b[0][1])) / 2];
+                      // update the projection to use computed scale and translate....
+                      projection
+                          .scale(s)
+                          .translate(t);
+                      // calculate and draw a bounding box for the geojson
+                      svg.append("rect")
+                          .attr('width', w)
+                          .attr('height', h)
+                          .attr('fill', "white");
+                      // draw the svg of both the geojson and bounding box
+                      svg.selectAll("path").data(json.features).enter().append("path")
+                          .attr("d", path)
+                          .style("fill", "green")
+                          .style("stroke-width", "1")
+                          .style("stroke", "blue")
+                      console.log(json);
+                      console.log(s);
+                      console.log(t);
     });
   }
 });
