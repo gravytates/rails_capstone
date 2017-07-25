@@ -5,3 +5,4 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+# parks = Park.create([type: "Feature", properties: {NAME: "Albert Kelly Park", ACRES: integer}, geometry: {coordinates: {[long, lat]}}])
