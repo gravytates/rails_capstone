@@ -34,8 +34,6 @@ var h = 500;
         .attr("height", h);
   //Load in GeoJSON data
 
-
-
 function error() {
     console.log("Something went wrong!");
 }
@@ -52,6 +50,5 @@ $(document).ready(function(){
        .enter()
        .append("path")
        .attr("d", path);
-
   });
 });
