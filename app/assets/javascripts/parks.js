@@ -32,7 +32,7 @@ $(document).ready(function(){
 
   // AlbersUSA projection
   var projection = d3.geoAlbersUsa()
-  .translate([w/2, h/2])
+  // .translate([w/2, h/2])
   .scale([1500]);
   //  .scale([250]);
   //Define path generator
@@ -60,7 +60,10 @@ $(document).ready(function(){
       .data(json.features)
       .enter()
       .append("path")
-      .attr("d", path);
+      .attr("d", path)
+      .attr("fill", function() {
+         return "green";
+        });
       // }
 
     });
