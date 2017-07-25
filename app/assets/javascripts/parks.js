@@ -27,7 +27,7 @@ $(document).ready(function(){
                       var b = path.bounds(json),
                           s = .95 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h),
                           t = [(w - s * (b[1][0] + b[0][0])) / 2, (h - s * (b[1][1] + b[0][1])) / 2];
-                      // update the projection to use computed scale and translate....
+                      // update the projection to use computed scale and translate
                       projection
                           .scale(s)
                           .translate(t);
@@ -42,9 +42,13 @@ $(document).ready(function(){
                           .style("fill", "green")
                           .style("stroke-width", "1")
                           .style("stroke", "blue")
+
+                      d3.select("svg")
+                        .call(d3.zoom().on("zoom", function () {
+                          svg.attr("transform", d3.event.transform)
+                        }))
+                        .append("g");
                       console.log(json);
-                      console.log(s);
-                      console.log(t);
     });
   }
 });
