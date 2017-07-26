@@ -23,14 +23,14 @@ $(document).ready(function(){
       var projection = d3.geoAlbersUsa()
                           .scale(1)
                           .translate([0,0]);
-                      // create a path generator.
+
                       var path = d3.geoPath()
                           .projection(projection);
-                      // compute bounds of a point of interest, then derive scale and translate
+
                       var b = path.bounds(json),
                           s = .95 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h),
                           t = [(w - s * (b[1][0] + b[0][0])) / 2, (h - s * (b[1][1] + b[0][1])) / 2];
-                      // update the projection to use computed scale and translate
+
                       projection
                           .scale(s)
                           .translate(t);
@@ -49,24 +49,24 @@ $(document).ready(function(){
                           .on('mouseout', handleMouseOut)
 
                       // Potential Label Magic
-                      labels.selectAll('.label').data(json.features).enter().append('text')
-                        .attr("class", "halo")
-                        .attr('transform', function(d) {
-                            return "translate(" + path.centroid(d) + ")";
-                        })
-                        .style('text-anchor', 'middle')
-                        .text(function(d) {
-                            return d.properties.NAME
-                        });
-                      labels.selectAll('.label').data(json.features).enter().append('text')
-                        .attr("class", "label")
-                        .attr('transform', function(d) {
-                            return "translate(" + path.centroid(d) + ")";
-                        })
-                        .style('text-anchor', 'middle')
-                        .text(function(d) {
-                            return d.properties.NAME
-                        });
+                      // labels.selectAll('.label').data(json.features).enter().append('text')
+                      //   .attr("class", "halo")
+                      //   .attr('transform', function(d) {
+                      //       return "translate(" + path.centroid(d) + ")";
+                      //   })
+                      //   .style('text-anchor', 'middle')
+                      //   .text(function(d) {
+                      //       return d.properties.NAME
+                      //   });
+                      // labels.selectAll('.label').data(json.features).enter().append('text')
+                      //   .attr("class", "label")
+                      //   .attr('transform', function(d) {
+                      //       return "translate(" + path.centroid(d) + ")";
+                      //   })
+                      //   .style('text-anchor', 'middle')
+                      //   .text(function(d) {
+                      //       return d.properties.NAME
+                      //   });
 
                       // zoom magicks
                       d3.select("svg")
@@ -90,18 +90,8 @@ $(document).ready(function(){
                         d3.select(this)
                           .attr('fill', 'green')
                       }
-
-
                       console.log(json);
 
     });
   }
 });
-
-// .append("svg:path")
-// .append("svg:title")
-// .text(function(d) { return d.properties.NAME; });
-
-// svg.selectAll("path").data(json.features).enter().append("svg:path")
-//     .append("svg:title") // TITLE APPENDED HERE
-//     .text(function(d) { return d.properties.NAME; });
