@@ -1,11 +1,15 @@
 // width and height for SVG element
 var response;
+var result;
 var scale = 7000;
+var epicodus = [-122.677393, 45.520600]
 
 $(document).ready(function(){
   run();
   var w = 1000;
   var h = 600;
+  var barWidth = 20;
+  var plotHeight = 500;
 
   var svg = d3.select("body")
   .append("svg")
@@ -46,7 +50,8 @@ $(document).ready(function(){
                           .style("stroke-width", "0.5")
                           .style("stroke", "black")
                           .on("mouseover", handleMouseOver)
-                          .on('mouseout', handleMouseOut)
+                          .on('mouseout', handleMouseOut);
+
 
                       // Potential Label Magic
                       // labels.selectAll('.label').data(json.features).enter().append('text')
@@ -84,13 +89,54 @@ $(document).ready(function(){
                         //   .text(function(d) {
                         //     return d.properties.NAME;  // Value of the text
                         //   });
-                        console.log(this);
+                        // console.log(this);
                       }
                       function handleMouseOut(d, i ) {
                         d3.select(this)
                           .attr('fill', 'green')
                       }
                       console.log(json);
+
+
+
+                      d3.csv('/locations.csv', function(data){
+                        console.log(result = data);
+                         svg.selectAll('circle')
+                         .data(data)
+                         .enter()
+                         .append("circle")
+                         .attr("cx", function(d) {
+                           return projection([d[' lon'], d[' lat']])[0];
+                         })
+                         .attr("cy", function(d){
+                           return projection([d[' lon'], d[' lat']])[1];
+                         })
+                         .attr('r', 5)
+                         .style('fill', 'crimson')
+                         .style('opacity', 0.75);
+                       });
+
+                      //  var yScale = d3.scaleLinear()
+                      //  .domain([0, d3.max(json)])
+                      //  .range([0, (plotHeight - 100)]);
+                      // d3.select("#plot")
+                      //
+                      //  .selectAll("rect")
+                      //  .data(json)
+                      //  .enter()
+                      //  .append("rect")
+                      //  .attr("width", barWidth)
+                      //  .attr("height", function(d){ return yScale(d); })
+                      //  .attr("fill", function(d, i) {
+                      //      return colors[i];
+                      //  })
+                      //  .attr("x", function(d, i){
+                      //      return (i * 100) + 90; // horizontal location of bars
+                      //  })
+                      //  .attr("y", function(d){
+                      //      return plotHeight - yScale(d); // scale bars within plotting area
+                      //  });
+
 
     });
   }
