@@ -120,10 +120,10 @@ $(document).ready(function(){
                          .enter()
                          .append('text')
                          .attr("x", function(d) {
-                           return projection([d[' lon'], d[' lat']])[0];
+                           return projection([d[' lon'], d[' lat']])[0] + 5;
                          })
                          .attr("y", function(d){
-                           return projection([d[' lon'], d[' lat']])[1];
+                           return projection([d[' lon'], d[' lat']])[1] - 5;
                          })
                          .text(function(d) {
                            return d[' place'];
