@@ -50,28 +50,9 @@ $(document).ready(function(){
                           .style("stroke-width", "0.5")
                           .style("stroke", "black")
                           .on("mouseover", handleMouseOver)
-                          .on('mouseout', handleMouseOut);
-
-
-                      // Potential Label Magic
-                      // labels.selectAll('.label').data(json.features).enter().append('text')
-                      //   .attr("class", "halo")
-                      //   .attr('transform', function(d) {
-                      //       return "translate(" + path.centroid(d) + ")";
-                      //   })
-                      //   .style('text-anchor', 'middle')
-                      //   .text(function(d) {
-                      //       return d.properties.NAME
-                      //   });
-                      // labels.selectAll('.label').data(json.features).enter().append('text')
-                      //   .attr("class", "label")
-                      //   .attr('transform', function(d) {
-                      //       return "translate(" + path.centroid(d) + ")";
-                      //   })
-                      //   .style('text-anchor', 'middle')
-                      //   .text(function(d) {
-                      //       return d.properties.NAME
-                      //   });
+                          .on('mouseout', handleMouseOut)
+                          .append("svg:title")
+                            .text(function(d) { return d.properties.NAME + ", acreage: " + d.properties.ACRES; });
 
                       // zoom magicks
                       d3.select("svg")
@@ -80,17 +61,11 @@ $(document).ready(function(){
                         }))
                         .append("g");
 
-                      function handleMouseOver(d, path) {  // Add interactivity
-                        // Use D3 to select element, change color and size
+                      function handleMouseOver(d, path) {
                         d3.select(this)
                           .attr('fill', 'orange')
-
-                        // svg.append('text').attr("d", path)
-                        //   .text(function(d) {
-                        //     return d.properties.NAME;  // Value of the text
-                        //   });
-                        // console.log(this);
                       }
+                      
                       function handleMouseOut(d, i ) {
                         d3.select(this)
                           .attr('fill', 'green')
@@ -100,7 +75,7 @@ $(document).ready(function(){
 
 
                       d3.csv('/locations.csv', function(data){
-                        console.log(result = data);
+
                          svg.selectAll('circle')
                          .data(data)
                          .enter()
@@ -131,6 +106,7 @@ $(document).ready(function(){
                          .attr('font-family', 'sans-serif')
                          .attr('font-size', '12px')
                          .attr('fill', 'crimson');
+
 
                        });
 
