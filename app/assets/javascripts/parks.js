@@ -12,7 +12,6 @@ $(document).ready(function(){
   .attr("width", w)
   .attr("height", h);
 
-
   // MAKE A MAP
   function run() {
     d3.json('/park_data.json', function(json) {
@@ -31,24 +30,60 @@ $(document).ready(function(){
                       projection
                           .scale(s)
                           .translate(t);
-                      // calculate and draw a bounding box for the geojson
+
                       svg.append("rect")
                           .attr('width', w)
                           .attr('height', h)
                           .attr('fill', "white");
+
                       // draw the svg of both the geojson and bounding box
                       svg.selectAll("path").data(json.features).enter().append("path")
                           .attr("d", path)
-                          .style("fill", "green")
-                          .style("stroke-width", "1")
-                          .style("stroke", "blue")
+                          .style("stroke-width", "0.5")
+                          .style("stroke", "black")
+                          .on("mouseover", handleMouseOver)
+                          .on('mouseout', handleMouseOut)
+                          // .style("fill", "green");
+
 
                       d3.select("svg")
                         .call(d3.zoom().on("zoom", function () {
                           svg.attr("transform", d3.event.transform)
                         }))
                         .append("g");
+
+                      function handleMouseOver(d, i) {  // Add interactivity
+                        // Use D3 to select element, change color and size
+                        d3.select(this)
+                          .attr('fill', 'orange')
+                        console.log(this);
+
+                        // Specify where to put label of text
+                        // svg.append("text").attr({
+                        //     x: function() { return xScale(d.x) - 30; },
+                        //     y: function() { return yScale(d.y) - 15; }
+                        // })
+                        // .text(function() {
+                        //   return [d.x, d.y];  // Value of the text
+                        // });
+                      }
+
+                      function handleMouseOut(d, i ) {
+                        d3.select(this)
+                          .attr('fill', 'green')
+                      }
+
+
                       console.log(json);
+
     });
   }
 });
+
+// .append("svg:path")
+// .append("svg:title")
+// .text(function(d) { return d.properties.NAME; });
+
+// svg.selectAll("path").data(json.features).enter().append("svg:path")
+//     .append("svg:title") // TITLE APPENDED HERE
+//     .text(function(d) { return d.properties.NAME; });
