@@ -112,8 +112,26 @@ $(document).ready(function(){
                            return projection([d[' lon'], d[' lat']])[1];
                          })
                          .attr('r', 5)
-                         .style('fill', 'crimson')
-                         .style('opacity', 0.75);
+                         .style('fill', 'orange')
+                         .style('opacity', 0.85);
+
+                         svg.selectAll('text')
+                         .data(data)
+                         .enter()
+                         .append('text')
+                         .attr("x", function(d) {
+                           return projection([d[' lon'], d[' lat']])[0];
+                         })
+                         .attr("y", function(d){
+                           return projection([d[' lon'], d[' lat']])[1];
+                         })
+                         .text(function(d) {
+                           return d[' place'];
+                         })
+                         .attr('font-family', 'sans-serif')
+                         .attr('font-size', '12px')
+                         .attr('fill', 'crimson');
+
                        });
 
                       //  var yScale = d3.scaleLinear()
