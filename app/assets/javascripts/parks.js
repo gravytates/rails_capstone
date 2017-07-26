@@ -65,7 +65,7 @@ $(document).ready(function(){
                         d3.select(this)
                           .attr('fill', 'orange')
                       }
-                      
+
                       function handleMouseOut(d, i ) {
                         d3.select(this)
                           .attr('fill', 'green')
@@ -74,7 +74,7 @@ $(document).ready(function(){
 
 
 
-                      d3.csv('/locations.csv', function(data){
+                      d3.csv('/farmer_markets.csv', function(data){
 
                          svg.selectAll('circle')
                          .data(data)
@@ -88,24 +88,26 @@ $(document).ready(function(){
                          })
                          .attr('r', 5)
                          .style('fill', 'orange')
-                         .style('opacity', 0.85);
+                         .style('opacity', 0.85)
+                         .append("svg:title")
+                           .text(function(d) { return d[' place']; });
 
-                         svg.selectAll('text')
-                         .data(data)
-                         .enter()
-                         .append('text')
-                         .attr("x", function(d) {
-                           return projection([d[' lon'], d[' lat']])[0] + 5;
-                         })
-                         .attr("y", function(d){
-                           return projection([d[' lon'], d[' lat']])[1] - 5;
-                         })
-                         .text(function(d) {
-                           return d[' place'];
-                         })
-                         .attr('font-family', 'sans-serif')
-                         .attr('font-size', '12px')
-                         .attr('fill', 'crimson');
+                        //  svg.selectAll('text')
+                        //  .data(data)
+                        //  .enter()
+                        //  .append('text')
+                        //  .attr("x", function(d) {
+                        //    return projection([d[' lon'], d[' lat']])[0] + 5;
+                        //  })
+                        //  .attr("y", function(d){
+                        //    return projection([d[' lon'], d[' lat']])[1] - 5;
+                        //  })
+                        //  .text(function(d) {
+                        //    return d[' place'];
+                        //  })
+                        //  .attr('font-family', 'sans-serif')
+                        //  .attr('font-size', '12px')
+                        //  .attr('fill', 'crimson');
 
 
                        });
