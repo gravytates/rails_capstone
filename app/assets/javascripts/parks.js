@@ -42,7 +42,7 @@ $(document).ready(function(){
 
       // draw the svg of both the geojson and bounding box
       svg.selectAll("path").data(json.features).enter()
-      .append("path")
+          .append("path")
           .attr("d", path)
           .style("stroke-width", "0.5")
           .style("stroke", "black")
@@ -76,6 +76,9 @@ $(document).ready(function(){
          .enter()
          .append("circle")
          .transition()
+         .delay(function(d, i) {
+              return i * 25;
+          })
          .duration(1000)
          .attr("cx", function(d) {
            return projection([d[' lon'], d[' lat']])[0];
