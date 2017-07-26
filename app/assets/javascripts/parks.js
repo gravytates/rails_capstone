@@ -71,15 +71,15 @@ $(document).ready(function(){
 // Farmer Market Data
       d3.csv('/farmer_markets.csv', function(data){
 
-         svg.selectAll('circle')
+         var markets = svg.selectAll('circle')
          .data(data)
          .enter()
          .append("circle")
          .transition()
-         .delay(function(d, i) {
-              return i * 25;
-          })
          .duration(1000)
+         .delay(function(d, i) {
+           return i * 25;
+         })
          .attr("cx", function(d) {
            return projection([d[' lon'], d[' lat']])[0];
          })
@@ -88,9 +88,21 @@ $(document).ready(function(){
          })
          .attr('r', 5)
          .style('fill', 'red')
-         .style('opacity', 0.85)
-         .append("svg:title")
-           .text(function(d) { return d[' place']; });
+         .style('opacity', 0.5);
+
+
+        svg.selectAll('circle').on('mouseover', function(d,i) {
+          d3.select(this)
+          .append("svg:title")
+          .text(function(d) { return d[' place']; });
+        });
+
+
+
+
+        //  markets.append("svg:title")
+        //    .text(function(d) { return d[' place']; })
+
 
        });
 
