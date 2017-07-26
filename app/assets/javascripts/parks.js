@@ -12,6 +12,10 @@ $(document).ready(function(){
   .attr("width", w)
   .attr("height", h);
 
+  var raster = svg.append("g");
+  var features = svg.append('g').attr('class', 'features');
+  var labels = svg.append('g').attr('class', 'labels');
+
   // MAKE A MAP
   function run() {
     d3.json('/park_data.json', function(json) {
@@ -43,31 +47,45 @@ $(document).ready(function(){
                           .style("stroke", "black")
                           .on("mouseover", handleMouseOver)
                           .on('mouseout', handleMouseOut)
-                          // .style("fill", "green");
 
+                      // Potential Label Magic
+                      labels.selectAll('.label').data(json.features).enter().append('text')
+                        .attr("class", "halo")
+                        .attr('transform', function(d) {
+                            return "translate(" + path.centroid(d) + ")";
+                        })
+                        .style('text-anchor', 'middle')
+                        .text(function(d) {
+                            return d.properties.NAME
+                        });
+                      labels.selectAll('.label').data(json.features).enter().append('text')
+                        .attr("class", "label")
+                        .attr('transform', function(d) {
+                            return "translate(" + path.centroid(d) + ")";
+                        })
+                        .style('text-anchor', 'middle')
+                        .text(function(d) {
+                            return d.properties.NAME
+                        });
 
+                      // zoom magicks
                       d3.select("svg")
                         .call(d3.zoom().on("zoom", function () {
                           svg.attr("transform", d3.event.transform)
                         }))
                         .append("g");
 
-                      function handleMouseOver(d, i) {  // Add interactivity
+                      function handleMouseOver(d, path) {  // Add interactivity
                         // Use D3 to select element, change color and size
                         d3.select(this)
                           .attr('fill', 'orange')
+
+                        // svg.append('text').attr("d", path)
+                        //   .text(function(d) {
+                        //     return d.properties.NAME;  // Value of the text
+                        //   });
                         console.log(this);
-
-                        // Specify where to put label of text
-                        // svg.append("text").attr({
-                        //     x: function() { return xScale(d.x) - 30; },
-                        //     y: function() { return yScale(d.y) - 15; }
-                        // })
-                        // .text(function() {
-                        //   return [d.x, d.y];  // Value of the text
-                        // });
                       }
-
                       function handleMouseOut(d, i ) {
                         d3.select(this)
                           .attr('fill', 'green')
