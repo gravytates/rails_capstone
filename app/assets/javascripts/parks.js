@@ -7,11 +7,13 @@ $(document).ready(function(){
   run();
   var w = 800;
   var h = 600;
+  var w2 = 800;
+  var h2 = 400;
   var barWidth = 20;
   var plotHeight = 500;
   var barPadding = 2;
 
-  var svg = d3.select(".container")
+  var svg = d3.select("#map")
   .append("svg")
   .attr("width", w)
   .attr("height", h);
@@ -113,19 +115,19 @@ $(document).ready(function(){
 
     d3.json('/park_data.json', function(json) {
     // Bar Graph
-      var svg2 = d3.select("body")
+      var svg2 = d3.select("#graph")
       .append("svg")
-      .attr("width", w)
-      .attr("height", h);
+      .attr("width", w2)
+      .attr("height", h2);
 
       // console.log(response = json.features.length);
       var x = d3.scaleBand()
               .domain(d3.range(json.features.length))
-              .rangeRound([0, w], 0.1)
+              .rangeRound([0, w2], 0.1)
               .paddingInner(0.05);
       var y = d3.scaleLinear()
     					.domain([0, d3.max(json.features)])
-    					.range([0, h]);
+    					.range([0, h2]);
 
 
       svg2.selectAll("rect")
@@ -135,9 +137,12 @@ $(document).ready(function(){
         .attr("class", "bar")
         .attr("x", function(d,i) { return x(i); })
         .attr("width", x.bandwidth())
-        .attr("y", function(d,i) { return h - (d.properties.ACRES); })
-        // .attr("height", function(d) { return y(d); })
-        .attr('fill', 'teal');
+        .attr("y", function(d,i) { return h2 - (d.properties.ACRES); })
+        .attr("height", function(d) { return y(d); })
+        .attr('height', 30)
+        .attr('fill', 'teal')
+        .append("rect:title")
+          .text(function(d) { return d.properties.NAME + ", acreage: " + d.properties.ACRES; });
     });
 
     // Farmer Data Graph?
