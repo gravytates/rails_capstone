@@ -120,15 +120,24 @@ $(document).ready(function(){
       .attr("width", w2)
       .attr("height", h2);
 
-      // console.log(response = json.features.length);
+      // D3.MAX WORKAROUND FOR JSON OBJECTS
+      var max = d3.entries(json.features)
+                .sort(function(a, b) {
+                  return d3.descending(a.value.properties.ACRES,       b.value.properties.ACRES)
+                })[0].value.properties.ACRES;
+
+      // var max = 5099;
+
       var x = d3.scaleBand()
               .domain(d3.range(json.features.length))
               .rangeRound([0, w2], 0.1)
               .paddingInner(0.05);
+
       var y = d3.scaleLinear()
-    					.domain([0, d3.max(json.features)])
+    					.domain([0, max])
     					.range([0, h2]);
 
+      console.log(response = json.features);
 
       svg2.selectAll("rect")
         .data(json.features)
@@ -136,10 +145,10 @@ $(document).ready(function(){
         .append('rect')
         .attr("class", "bar")
         .attr("x", function(d,i) { return x(i); })
+        .attr("y", function(d) { return h2 - y(d.properties.ACRES); })
         .attr("width", x.bandwidth())
-        .attr("y", function(d,i) { return h2 - (d.properties.ACRES); })
-        .attr("height", function(d) { return y(d); })
-        .attr('height', 30)
+        .attr("height", function(d) { return y(d.properties.ACRES); })
+        // .attr('height', 30)
         .attr('fill', 'teal')
         .append("rect:title")
           .text(function(d) { return d.properties.NAME + ", acreage: " + d.properties.ACRES; });
