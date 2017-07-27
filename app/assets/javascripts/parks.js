@@ -5,13 +5,15 @@ var result;
 
 $(document).ready(function(){
   run();
-  var w = 800;
-  var h = 600;
-  var w2 = 800;
-  var h2 = 400;
-  var barWidth = 20;
-  var plotHeight = 500;
-  var barPadding = 2;
+  var margin = {top: 20, right: 20, bottom: 50, left: 20},
+      w = 800,
+      h = 600,
+      w2 = 800,
+      h2 = 400,
+      barWidth = 20,
+      plotHeight = 500,
+      barPadding = 2,
+      axisPadding = 1;
 
   var svg = d3.select("#map")
   .append("svg")
@@ -110,34 +112,38 @@ $(document).ready(function(){
         });
        });
 
-
     });
 
+    // BAR GRAPH
+
     d3.json('/park_data.json', function(json) {
-    // Bar Graph
+
       var svg2 = d3.select("#graph")
       .append("svg")
-      .attr("width", w2)
+      .attr("width", w2 + margin.left)
       .attr("height", h2);
 
       // D3.MAX WORKAROUND FOR JSON OBJECTS
       var max = d3.entries(json.features)
                 .sort(function(a, b) {
                   return d3.descending(a.value.properties.ACRES,       b.value.properties.ACRES)
-                })[0].value.properties.ACRES;
-
-      // var max = 5099;
+                })[1].value.properties.ACRES;
 
       var x = d3.scaleBand()
               .domain(d3.range(json.features.length))
-              .rangeRound([0, w2], 0.1)
-              .paddingInner(0.05);
+              .rangeRound([0, w2], 0.3)
+              .paddingInner(0.10);
 
       var y = d3.scaleLinear()
     					.domain([0, max])
     					.range([0, h2]);
 
-      console.log(response = json.features);
+      var xAxis = d3.axisBottom()
+               .scale(x)
+               .ticks(2);
+
+      var yAxis = d3.axisLeft()
+              .scale(y);
 
       svg2.selectAll("rect")
         .data(json.features)
@@ -152,7 +158,35 @@ $(document).ready(function(){
         .attr('fill', 'teal')
         .append("rect:title")
           .text(function(d) { return d.properties.NAME + ", acreage: " + d.properties.ACRES; });
+
+      svg2.append("g")
+        .attr("class", "axis") //Assign "axis" class
+        .attr("transform", "translate(0," + (h2 - axisPadding) + ")")
+        .call(xAxis);
+
+
+
+
+      // svg2.append("g")
+      //   .attr("class", "axis") //Assign "axis" class
+      //   .attr("transform", "translate(0," + (h2 - axisPadding) + ")")
+      //   .call(yAxis);
+
+      svg2.append("g")
+        // .attr("transform", "translate(0," + (w2 + axisPadding) + ")")
+        .call(d3.axisLeft(y));
+
+      svg2.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x",0 - (h2 / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Acres");
+
+
     });
+
 
     // Farmer Data Graph?
     // var svg3 = d3.select("body")
