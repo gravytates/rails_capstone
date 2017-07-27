@@ -11,7 +11,7 @@ $(document).ready(function(){
   var plotHeight = 500;
   var barPadding = 2;
 
-  var svg = d3.select("body")
+  var svg = d3.select(".container")
   .append("svg")
   .attr("width", w)
   .attr("height", h);

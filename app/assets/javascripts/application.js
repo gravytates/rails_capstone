@@ -13,6 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require rails-ujs
+//= require bootstrap-sprockets
 //= require d3.min
 //= require d3-geo.v1.min
+//= require turbolinks
 //= require_tree .
