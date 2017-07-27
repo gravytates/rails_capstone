@@ -38,7 +38,8 @@ $(document).ready(function(){
       svg.append("rect")
           .attr('width', w)
           .attr('height', h)
-          .attr('fill', "lightgrey");
+          .attr('fill', 'white')
+          .attr('border', 1);
 
       // draw the svg of both the geojson and bounding box
       svg.selectAll("path").data(json.features).enter()
@@ -50,6 +51,15 @@ $(document).ready(function(){
           .on('mouseout', handleMouseOut)
           .append("svg:title")
             .text(function(d) { return d.properties.NAME + ", acreage: " + d.properties.ACRES; });
+
+      var borderPath = svg.append("rect")
+         	.attr("x", 0)
+     			.attr("y", 0)
+     			.attr("height", h)
+     			.attr("width", w)
+     			.style("stroke", 'black')
+     			.style("fill", "none")
+     			.style("stroke-width", 1);
 
       // zoom magicks
       d3.select("svg")
