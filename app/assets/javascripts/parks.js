@@ -5,7 +5,7 @@ var result;
 
 $(document).ready(function(){
   run();
-  var margin = {top: 20, right: 20, bottom: 50, left: 20},
+  var margin = {top: 20, right: 20, bottom: 50, left: 13},
       w = 800,
       h = 600,
       w2 = 800,
@@ -13,7 +13,7 @@ $(document).ready(function(){
       barWidth = 20,
       plotHeight = 500,
       barPadding = 2,
-      axisPadding = 1;
+      axisPadding = -3;
 
   var svg = d3.select("#map")
   .append("svg")
@@ -121,12 +121,13 @@ $(document).ready(function(){
       var svg2 = d3.select("#graph")
       .append("svg")
       .attr("width", w2 + margin.left)
-      .attr("height", h2);
+      .attr("height", h2 + margin.bottom);
 
       // D3.MAX WORKAROUND FOR JSON OBJECTS
       var max = d3.entries(json.features)
                 .sort(function(a, b) {
-                  return d3.descending(a.value.properties.ACRES,       b.value.properties.ACRES)
+                  return d3.descending(a.value.properties.ACRES,
+                  b.value.properties.ACRES)
                 })[1].value.properties.ACRES;
 
       var x = d3.scaleBand()
@@ -140,10 +141,14 @@ $(document).ready(function(){
 
       var xAxis = d3.axisBottom()
                .scale(x)
-               .ticks(2);
+               .tickValues([0,50,100,150,200,250,300]);
 
       var yAxis = d3.axisLeft()
-              .scale(y);
+                  .scale(y)
+                  // .tickValues(json.features.map(function(d){ return [0,100,200,300,400,500,600]}));
+                  // .tickValues([0,100,200,300,400,500,600]);
+
+              // .ticks(20);
 
       svg2.selectAll("rect")
         .data(json.features)
@@ -159,31 +164,39 @@ $(document).ready(function(){
         .append("rect:title")
           .text(function(d) { return d.properties.NAME + ", acreage: " + d.properties.ACRES; });
 
+
+
+      // APPLY AXES
+
       svg2.append("g")
         .attr("class", "axis") //Assign "axis" class
         .attr("transform", "translate(0," + (h2 - axisPadding) + ")")
         .call(xAxis);
 
-
-
-
-      // svg2.append("g")
-      //   .attr("class", "axis") //Assign "axis" class
-      //   .attr("transform", "translate(0," + (h2 - axisPadding) + ")")
-      //   .call(yAxis);
-
       svg2.append("g")
-        // .attr("transform", "translate(0," + (w2 + axisPadding) + ")")
-        .call(d3.axisLeft(y));
+        .attr("class", "axis") //Assign "axis" class
+        // .attr("transform", "translate(0," + (w2 - axisPadding) + ")")
+        .call(yAxis);
+
+      // Y AXIS LABEL
 
       svg2.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y", 0 - margin.left)
+        .attr("y", 0 + margin.left)
         .attr("x",0 - (h2 / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
         .text("Acres");
 
+
+        // X AXIS LABEL
+
+        svg2.append("text")
+            .attr("transform",
+                  "translate(" + (w2/2) + " ," +
+                  (h2 + margin.top + 17) + ")")
+            .style("text-anchor", "middle")
+            .text("Parks");
 
     });
 
